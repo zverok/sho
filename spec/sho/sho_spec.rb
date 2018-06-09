@@ -6,7 +6,9 @@ RSpec.describe Sho do
   let(:object) { view.new }
 
   describe '#template' do
-    before { sho.template :test, 'fake.slim' }
+    let(:args) { [] }
+    before { sho.template :test, 'fake.slim', *args }
+
     it { expect(view.instance_methods).to include(:test) }
 
     describe 'rendering' do
@@ -15,19 +17,50 @@ RSpec.describe Sho do
         File.write 'fake.slim', template
       }
       subject { object.test(**params) }
+
       let(:params) { {} }
-      let(:template) {
-        <<~SLIM
-          p It works!
-        SLIM
-      }
+      let(:template) { 'p It works!' }
 
       it { is_expected.to eq '<p>It works!</p>' }
 
-      describe 'context passing'
-      describe 'params passing'
+      describe 'context passing' do
+        let(:template) { 'p It #{action}!' }
+        before {
+          allow(object).to receive(:action).and_return('rules')
+        }
+
+        it { is_expected.to eq '<p>It rules!</p>' }
+      end
+
+      describe 'params passing' do
+        let(:args) { [:name, title: 'Mr.'] }
+        let(:template) { 'p Hello #{title} #{name}!' }
+        let(:params) { {name: 'Jones', title: 'Dr.'} }
+
+        it { is_expected.to eq '<p>Hello Dr. Jones!</p>' }
+
+        xcontext 'with default args' do
+          let(:params) { {name: 'Jones'} }
+          it { is_expected.to eq '<p>Hello, Mr. Jones!</p>' }
+        end
+      end
+
       describe 'params validation'
-      describe 'template lookup'
+
+      describe 'template lookup' do
+        context 'when non-default folder set' do
+          before {
+            sho.base_folder = 'app/views/details'
+            # previous call was before base_folder change
+            sho.template :test, 'fake.slim', *args
+            FileUtils.rm 'fake.slim'
+            FileUtils.mkdir_p 'app/views/details'
+            File.write 'app/views/details/fake.slim', template
+          }
+
+          it { is_expected.to eq '<p>It works!</p>' }
+        end
+      end
     end
   end
 
