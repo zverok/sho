@@ -42,14 +42,29 @@ RSpec.describe Sho::Configurator do
         let(:params) { {name: 'Jones', title: 'Dr.'} }
 
         it { is_expected.to eq '<p>Hello Dr. Jones!</p>' }
-
-        xcontext 'with default args' do
-          let(:params) { {name: 'Jones'} }
-          it { is_expected.to eq '<p>Hello, Mr. Jones!</p>' }
-        end
       end
 
-      describe 'params validation'
+      describe 'params validation' do
+        let(:args) { [:name, title: 'Mr.'] }
+        let(:template) { 'p Hello #{title} #{name}!' }
+
+        context 'mandatory arguments missing' do
+          let(:params) { {title: 'Dr.'} }
+
+          its_block { is_expected.to raise_error ArgumentError }
+        end
+
+        context 'unknown argument' do
+          let(:params) { {name: 'Jones', tilte: 'Dr.'} }
+
+          its_block { is_expected.to raise_error ArgumentError }
+        end
+
+        context 'with default args' do
+          let(:params) { {name: 'Jones'} }
+          it { is_expected.to eq '<p>Hello Mr. Jones!</p>' }
+        end
+      end
 
       describe 'template lookup' do
         context 'when non-default folder set' do

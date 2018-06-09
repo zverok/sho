@@ -15,16 +15,16 @@ module Sho
       @host = host
     end
 
-    def template(name, template, *, _layout: nil, **)
-      define_template_method name, File.join(base_folder || Dir.pwd, template), _layout: _layout
+    def template(name, template, *mandatory, _layout: nil, **optional)
+      define_template_method name, File.join(base_folder || Dir.pwd, template), *mandatory, _layout: _layout, **optional
     end
 
-    def template_relative(name, template, *, _layout: nil, **)
+    def template_relative(name, template, *mandatory, _layout: nil, **optional)
       base = File.dirname(caller.first.split(':').first)
-      define_template_method name, File.join(base, template), _layout: _layout
+      define_template_method name, File.join(base, template), *mandatory, _layout: _layout, **optional
     end
 
-    def template_inline(name, _layout: nil, **options)
+    def template_inline(name, *mandatory, _layout: nil, **options)
       kind, template = options.detect { |key,| Tilt.registered?(key.to_s) }
       template or fail ArgumentError, "No known templates found in #{options.keys}"
 
@@ -42,9 +42,11 @@ module Sho
 
     private
 
-    def define_template_method(name, path, _layout:)
+    def define_template_method(name, path, *mandatory, _layout:, **optional)
+      arguments = ArgumentValidator.new(*mandatory, **optional)
       @host.__send__(:define_method, name) do |**locals|
         tilt = Tilt.new(path)
+        locals = arguments.call(**locals)
         if _layout
           __send__(_layout) { tilt.render(self, **locals) }
         else
