@@ -1,7 +1,14 @@
 require 'tilt'
 
 module Sho
+  def self.included(mod)
+    mod.define_singleton_method(:sho) {
+      @__sho_configurator__ ||= Configurator.new(mod)
+    }
+  end
+
   class Configurator
+    attr_reader :host
     attr_accessor :base_folder
 
     def initialize(host)
