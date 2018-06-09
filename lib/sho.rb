@@ -53,4 +53,23 @@ module Sho
       end
     end
   end
+
+  class ArgumentValidator
+    def initialize(*mandatory, **optional)
+      mandatory.all? { |m| m.is_a?(Symbol) } or
+        fail ArgumentError, 'Mandatory arguments should be send as array of symbols'
+      @mandatory = mandatory
+      @optional = optional
+    end
+
+    def call(**params)
+      (@mandatory - params.keys).tap { |missing|
+        missing.empty? or fail ArgumentError, "missing keywords: #{missing.join(', ')}"
+      }
+      (params.keys - @mandatory - @optional.keys).tap { |unknown|
+        unknown.empty? or fail ArgumentError, "unknown keywords: #{unknown.join(', ')}"
+      }
+      params.merge(@optional.reject { |key,| params.key?(key) })
+    end
+  end
 end
