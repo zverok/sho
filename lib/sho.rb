@@ -38,6 +38,8 @@ module Sho
       end
     end
 
+    alias inline_template template_inline
+
     private
 
     def define_template_method(name, path, _layout:)
