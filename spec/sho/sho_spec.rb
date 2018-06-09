@@ -1,13 +1,18 @@
 RSpec.describe Sho do
   include FakeFS::SpecHelpers
 
+  before {
+    FileUtils.mkdir_p REAL_PWD
+    Dir.chdir REAL_PWD # Sometimes in tests we work with "real path of current file"
+  }
+
   let(:view) { Class.new }
   let(:sho) { Sho::Configurator.new(view) }
   let(:object) { view.new }
 
   describe '#template' do
-    let(:args) { [] }
     before { sho.template :test, 'fake.slim', *args }
+    let(:args) { [] }
 
     it { expect(view.instance_methods).to include(:test) }
 
@@ -17,7 +22,6 @@ RSpec.describe Sho do
         File.write 'fake.slim', template
       }
       subject { object.test(**params) }
-
       let(:params) { {} }
       let(:template) { 'p It works!' }
 
@@ -77,6 +81,36 @@ RSpec.describe Sho do
     end
   end
 
-  describe '#template_relative'
-  describe '#template_inline'
+  describe '#template_relative' do
+    before { sho.template_relative :test, 'fake.slim', *args }
+    let(:args) { [] }
+
+    it { expect(view.instance_methods).to include(:test) }
+
+    describe 'rendering' do
+      before {
+        FileUtils.mkdir_p 'spec/sho'
+        File.write 'spec/sho/fake.slim', template
+      }
+      subject { object.test(**params) }
+      let(:params) { {} }
+      let(:template) { 'p It works!' }
+
+      it { is_expected.to eq '<p>It works!</p>' }
+    end
+  end
+
+  describe '#template_inline' do
+    before { sho.template_inline :test, *args }
+    let(:args) { [{slim: 'p It works!'}] }
+
+    it { expect(view.instance_methods).to include(:test) }
+
+    describe 'rendering' do
+      subject { object.test(**params) }
+      let(:params) { {} }
+
+      it { is_expected.to eq '<p>It works!</p>' }
+    end
+  end
 end
