@@ -61,6 +61,19 @@ RSpec.describe Sho do
           it { is_expected.to eq '<p>It works!</p>' }
         end
       end
+
+      describe 'layout' do
+        let(:args) { [_layout: :laymeout] }
+        before {
+          class << object
+            def laymeout
+              'before ' + yield + ' after'
+            end
+          end
+        }
+
+        it { is_expected.to eq 'before <p>It works!</p> after' }
+      end
     end
   end
 

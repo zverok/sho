@@ -8,10 +8,15 @@ module Sho
       @host = host
     end
 
-    def template(name, template, *arguments)
+    def template(name, template, *, _layout: nil, **)
       path = File.join(base_folder || Dir.pwd, template)
       @host.__send__(:define_method, name) do |**locals|
-        Tilt.new(path).render(self, **locals)
+        tilt = Tilt.new(path)
+        if _layout
+          __send__(_layout) { tilt.render(self, **locals) }
+        else
+          tilt.render(self, **locals)
+        end
       end
     end
   end
