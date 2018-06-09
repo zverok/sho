@@ -1,0 +1,26 @@
+require: rubocop-rspec
+
+AllCops:
+  Include:
+    - 'lib/**/*'
+    - 'spec/**/*'
+  Exclude:
+    - 'tmp/**/*'
+    - 'examples/**'
+    - Gemfile
+    - Rakefile
+    - '*.gemspec'
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+
+Metrics/LineLength:
+  Max: 100
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/SignalException:
+  EnforcedStyle: semantic
+
+Style/BlockDelimiters:
+  EnforcedStyle: semantic

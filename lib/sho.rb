@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tilt'
 
 module Sho
@@ -7,6 +9,7 @@ module Sho
     }
   end
 
+  # rubocop:disable Lint/UnderscorePrefixedVariableName
   class Configurator
     attr_reader :host
     attr_accessor :base_folder
@@ -16,15 +19,27 @@ module Sho
     end
 
     def template(name, template, *mandatory, _layout: nil, **optional)
-      define_template_method name, File.join(base_folder || Dir.pwd, template), *mandatory, _layout: _layout, **optional
+      define_template_method(
+        name,
+        File.join(base_folder || Dir.pwd, template),
+        *mandatory,
+        _layout: _layout,
+        **optional
+      )
     end
 
     def template_relative(name, template, *mandatory, _layout: nil, **optional)
-      base = File.dirname(caller.first.split(':').first)
-      define_template_method name, File.join(base, template), *mandatory, _layout: _layout, **optional
+      base = File.dirname(caller(1..1).first.split(':').first)
+      define_template_method(
+        name,
+        File.join(base, template),
+        *mandatory,
+        _layout: _layout,
+        **optional
+      )
     end
 
-    def template_inline(name, *mandatory, _layout: nil, **options)
+    def template_inline(name, *_mandatory, _layout: nil, **options)
       kind, template = options.detect { |key,| Tilt.registered?(key.to_s) }
       template or fail ArgumentError, "No known templates found in #{options.keys}"
 
@@ -55,6 +70,7 @@ module Sho
       end
     end
   end
+  # rubocop:enable Lint/UnderscorePrefixedVariableName
 
   class ArgumentValidator
     def initialize(*mandatory, **optional)
@@ -65,12 +81,12 @@ module Sho
     end
 
     def call(**params)
-      (@mandatory - params.keys).tap { |missing|
+      (@mandatory - params.keys).tap do |missing|
         missing.empty? or fail ArgumentError, "missing keywords: #{missing.join(', ')}"
-      }
-      (params.keys - @mandatory - @optional.keys).tap { |unknown|
+      end
+      (params.keys - @mandatory - @optional.keys).tap do |unknown|
         unknown.empty? or fail ArgumentError, "unknown keywords: #{unknown.join(', ')}"
-      }
+      end
       params.merge(@optional.reject { |key,| params.key?(key) })
     end
   end
