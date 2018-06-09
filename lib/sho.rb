@@ -19,51 +19,36 @@ module Sho
     end
 
     def template(name, template, *mandatory, _layout: nil, **optional)
-      define_template_method(
-        name,
-        File.join(base_folder || Dir.pwd, template),
-        *mandatory,
-        _layout: _layout,
-        **optional
-      )
+      tpl = Tilt.new(File.expand_path(template, base_folder || Dir.pwd))
+      define_template_method(name, tpl, mandatory, optional, _layout)
     end
 
     def template_relative(name, template, *mandatory, _layout: nil, **optional)
       base = File.dirname(caller(1..1).first.split(':').first)
-      define_template_method(
-        name,
-        File.join(base, template),
-        *mandatory,
-        _layout: _layout,
-        **optional
-      )
+      tpl = Tilt.new(File.expand_path(template, base))
+
+      define_template_method(name, tpl, mandatory, optional, _layout)
     end
 
-    def template_inline(name, *_mandatory, _layout: nil, **options)
+    def template_inline(name, *mandatory, _layout: nil, **options)
       kind, template = options.detect { |key,| Tilt.registered?(key.to_s) }
       template or fail ArgumentError, "No known templates found in #{options.keys}"
+      optional = options.reject { |key,| key == kind }
+      tpl = Tilt.default_mapping[kind].new { template }
 
-      @host.__send__(:define_method, name) do |**locals|
-        tilt = Tilt.default_mapping[kind].new { template }
-        if _layout
-          __send__(_layout) { tilt.render(self, **locals) }
-        else
-          tilt.render(self, **locals)
-        end
-      end
+      define_template_method(name, tpl, mandatory, optional, _layout)
     end
 
     alias inline_template template_inline
 
     private
 
-    def define_template_method(name, path, *mandatory, _layout:, **optional)
+    def define_template_method(name, tilt, mandatory, optional, layout)
       arguments = ArgumentValidator.new(*mandatory, **optional)
       @host.__send__(:define_method, name) do |**locals|
-        tilt = Tilt.new(path)
         locals = arguments.call(**locals)
-        if _layout
-          __send__(_layout) { tilt.render(self, **locals) }
+        if layout
+          __send__(layout) { tilt.render(self, **locals) }
         else
           tilt.render(self, **locals)
         end
@@ -81,13 +66,23 @@ module Sho
     end
 
     def call(**params)
+      guard_missing!(params)
+      guard_unknown!(params)
+      params.merge(@optional.reject { |key,| params.key?(key) })
+    end
+
+    private
+
+    def guard_missing!(**params)
       (@mandatory - params.keys).tap do |missing|
         missing.empty? or fail ArgumentError, "missing keywords: #{missing.join(', ')}"
       end
+    end
+
+    def guard_unknown!(**params)
       (params.keys - @mandatory - @optional.keys).tap do |unknown|
         unknown.empty? or fail ArgumentError, "unknown keywords: #{unknown.join(', ')}"
       end
-      params.merge(@optional.reject { |key,| params.key?(key) })
     end
   end
 end

@@ -16,6 +16,9 @@ AllCops:
 Metrics/LineLength:
   Max: 100
 
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
 Style/AndOr:
   EnforcedStyle: conditionals
 

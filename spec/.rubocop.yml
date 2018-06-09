@@ -2,3 +2,15 @@ inherit_from: ../.rubocop.yml
 
 Style/BlockDelimiters:
   Enabled: false
+
+RSpec/EmptyExampleGroup:
+  CustomIncludeMethods: [its_block, its_call, its_map]
+
+RSpec/NestedGroups:
+  Enabled: false
+
+Lint/InterpolationCheck:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false

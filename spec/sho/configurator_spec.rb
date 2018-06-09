@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Sho::Configurator do
   include FakeFS::SpecHelpers
 
@@ -22,6 +24,7 @@ RSpec.describe Sho::Configurator do
         File.write 'fake.slim', template
       }
       subject { object.test(**params) }
+
       let(:params) { {} }
       let(:template) { 'p It works!' }
 
@@ -29,6 +32,7 @@ RSpec.describe Sho::Configurator do
 
       describe 'context passing' do
         let(:template) { 'p It #{action}!' }
+
         before {
           allow(object).to receive(:action).and_return('rules')
         }
@@ -48,13 +52,13 @@ RSpec.describe Sho::Configurator do
         let(:args) { [:name, title: 'Mr.'] }
         let(:template) { 'p Hello #{title} #{name}!' }
 
-        context 'mandatory arguments missing' do
+        context 'with mandatory arguments missing' do
           let(:params) { {title: 'Dr.'} }
 
           its_block { is_expected.to raise_error ArgumentError }
         end
 
-        context 'unknown argument' do
+        context 'with unknown argument' do
           let(:params) { {name: 'Jones', tilte: 'Dr.'} }
 
           its_block { is_expected.to raise_error ArgumentError }
@@ -62,6 +66,7 @@ RSpec.describe Sho::Configurator do
 
         context 'with default args' do
           let(:params) { {name: 'Jones'} }
+
           it { is_expected.to eq '<p>Hello Mr. Jones!</p>' }
         end
       end
@@ -83,6 +88,7 @@ RSpec.describe Sho::Configurator do
 
       describe 'layout' do
         let(:args) { [_layout: :laymeout] }
+
         before {
           class << object
             def laymeout
@@ -108,6 +114,7 @@ RSpec.describe Sho::Configurator do
         File.write 'spec/sho/fake.slim', template
       }
       subject { object.test(**params) }
+
       let(:params) { {} }
       let(:template) { 'p It works!' }
 
@@ -123,6 +130,7 @@ RSpec.describe Sho::Configurator do
 
     describe 'rendering' do
       subject { object.test(**params) }
+
       let(:params) { {} }
 
       it { is_expected.to eq '<p>It works!</p>' }
