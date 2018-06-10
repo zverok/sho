@@ -101,6 +101,8 @@ As Sho is a _library_, not a framework, it doesn't require you to switch to Sho-
 
 ```ruby
 class RatingDecorator < Draper::Decorator
+  # ...
+
   # before:
   def row
     h.content_tag(:tr,

@@ -26,3 +26,6 @@ module Sho
     }
   end
 end
+
+require_relative 'sho/argument_validator'
+require_relative 'sho/configurator'
