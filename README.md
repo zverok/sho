@@ -1,10 +1,10 @@
-# Sho: postframework view library
+# Sho: post-framework view library
 
-**Sho** is an experimental **postframework** Ruby view library. It is based on Tilt and meant to provide entire view layer for a web application (based on any framework or completely frameworkless).
+**Sho** is an experimental **post-framework** Ruby view library. It is based on Tilt and meant to provide entire view layer for a web application (based on any framework or completely frameworkless).
 
 <small>"Sho?" ("Шо?") is a Kharkiv dialecticism, meaning "What?", typically in a slightly aggressive manner. It is chosen as a library name because it is close to "show" in a written and spoken form (and also because "What?" is expected typical reaction to the library).</small>
 
-**Postframework** means Sho behaves as a decent _library_, neither implying nor forcing _any_ kind of conventions for your code layout and structure.
+**Post-framework** means Sho behaves as a decent _library_, neither implying nor forcing _any_ kind of conventions for your code layout and structure.
 
 Currently, if you want your app architecture not to follow strict framework's _frame_, you can take ROM or Sequel for _data layer_; Sinatra, Roda, or Grape for _routing layer_; but for _view layer_, the situation seems to be different. Typical "views" part of the application (say, with Rails, Hanami, Padrino) is bound to a lot of conventions (like "it will look for the corresponding template in that folders") and global configuration, and tightly coupled with routes/controllers ("if you want data from controller to be passed to view, you mark it so an so").
 
