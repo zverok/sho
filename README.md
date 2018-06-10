@@ -5,7 +5,7 @@
 
 **Sho** is an experimental **post-framework** Ruby view library. It is based on Tilt and meant to provide entire view layer for a web application (based on any framework or completely frameworkless).
 
-<small>"Sho?" ("Шо?") is a Kharkiv dialecticism, meaning "What?", typically in a slightly aggressive manner. It is chosen as a library name because it is close to "show" in a written and spoken form (and also because "What?" is expected typical reaction to the library).</small>
+<sup>"Sho?" ("Шо?") is a Kharkiv dialecticism, meaning "What?", typically in a slightly aggressive manner. It is chosen as a library name because it is close to "show" in a written and spoken form (and also because "What?" is expected typical reaction to the library).</sup>
 
 **Post-framework** means Sho behaves as a decent _library_, neither implying nor forcing _any_ kind of conventions for your code layout and structure.
 
@@ -24,7 +24,7 @@ sho.template :name, 'path/to/template.erb', :param1, param2: default_value
 
 This creates instance method with a signature¹ `YourClass#name(param1:, param2: default_value)`, which, when called, renders the template from `path/to/template.erb`.
 
-<small>¹Due to metaprogramming limitations, real signature of method would be `name(**params)` and check of mandatory params and assignment of defaults is performed by Sho.</small>
+<sup>¹Due to metaprogramming limitations, real signature of method would be `name(**params)` and check of mandatory params and assignment of defaults is performed by Sho.</sup>
 
 You can think about the template as a _method body_, which immediately answers a lot of questions:
 
