@@ -1,5 +1,8 @@
 # Sho: post-framework view library
 
+[![Gem Version](https://badge.fury.io/rb/sho.svg)](http://badge.fury.io/rb/sho)
+[![Build Status](https://travis-ci.org/zverok/sho.svg?branch=master)](https://travis-ci.org/zverok/sho)
+
 **Sho** is an experimental **post-framework** Ruby view library. It is based on Tilt and meant to provide entire view layer for a web application (based on any framework or completely frameworkless).
 
 <small>"Sho?" ("Шо?") is a Kharkiv dialecticism, meaning "What?", typically in a slightly aggressive manner. It is chosen as a library name because it is close to "show" in a written and spoken form (and also because "What?" is expected typical reaction to the library).</small>
