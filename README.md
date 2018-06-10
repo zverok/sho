@@ -125,6 +125,7 @@ class RatingDecorator < Draper::Decorator
         td = stars
         td = rated_at
     SLIM
+end
 ```
 
 **Template caching**

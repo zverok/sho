@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Sho
+  # @private
   class ArgumentValidator
     def initialize(*mandatory, **optional)
       mandatory.all? { |m| m.is_a?(Symbol) } or
