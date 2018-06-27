@@ -96,7 +96,7 @@ RSpec.describe Sho::Configurator do
           let(:args) { [_layout: :laymeout] }
 
           before {
-            sho.inline_template :laymeout, erb: <<~ERB.strip
+            sho.inline_template :laymeout, erb: <<-ERB.strip
               before <%= yield %> after
             ERB
           }
