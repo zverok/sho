@@ -90,6 +90,18 @@ RSpec.describe Sho::Configurator do
 
           it { is_expected.to eq 'before <p>It works!</p> after' }
         end
+
+        describe 'layout from template' do
+          let(:args) { [_layout: :laymeout] }
+
+          before {
+            sho.inline_template :laymeout, erb: <<~ERB.strip
+              before <%= yield %> after
+            ERB
+          }
+
+          it { is_expected.to eq 'before <p>It works!</p> after' }
+        end
       end
     end
 
