@@ -113,12 +113,12 @@ module Sho
 
     def define_template_method(name, tilt, mandatory, optional, layout)
       arguments = ArgumentValidator.new(*mandatory, **optional)
-      @host.__send__(:define_method, name) do |**locals|
+      @host.__send__(:define_method, name) do |**locals, &block|
         locals = arguments.call(**locals)
         if layout
           __send__(layout) { tilt.render(self, **locals) }
         else
-          tilt.render(self, **locals)
+          tilt.render(self, **locals, &block)
         end
       end
     end
