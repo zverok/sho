@@ -25,6 +25,7 @@ RSpec.describe Sho::Configurator do
 
     context 'when default base folder' do
       before { sho.template :test, 'fake.slim', *args }
+
       let(:path) { 'fake.slim' }
 
       it { expect(view.instance_methods).to include(:test) }
@@ -112,6 +113,7 @@ RSpec.describe Sho::Configurator do
         sho.base_folder = 'app/views/details'
         sho.template :test, 'fake.slim', *args
       }
+
       let(:params) { {} }
       let(:path) { 'app/views/details/fake.slim' }
 
@@ -138,6 +140,7 @@ RSpec.describe Sho::Configurator do
 
   describe '#template_inline' do
     before { sho.template_inline :test, *args }
+
     let(:args) { [{slim: 'p It works!'}] }
 
     it { expect(view.instance_methods).to include(:test) }

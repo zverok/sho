@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'fakefs'
   s.add_development_dependency 'slim'
 
-  s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'rubocop-rspec'
+  s.add_development_dependency 'rubocop', '~> 0.57.2'
+  s.add_development_dependency 'rubocop-rspec', '~> 1.27.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubygems-tasks'
