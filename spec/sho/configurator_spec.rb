@@ -119,6 +119,23 @@ RSpec.describe Sho::Configurator do
 
       it { is_expected.to eq '<p>It works!</p>' }
     end
+
+    context 'with cache disabled' do
+      subject { object }
+
+      before {
+        sho.cache = false
+        sho.template :test, 'fake.slim', *args
+      }
+      let(:params) { {} }
+      let(:path) { 'fake.slim' }
+
+      it {
+        expect(subject.test).to eq '<p>It works!</p>'
+        File.write(path, 'p No cache!')
+        expect(subject.test).to eq '<p>No cache!</p>'
+      }
+    end
   end
 
   describe '#template_relative' do
