@@ -48,8 +48,8 @@ You can think about the template as a _method body_, which immediately answers a
 * **How do I test it? How do I set all the context for testing?** Just as with regular method: just create an instance, and call the method, and test the result.
 * **But where do I put this method?** Wherever you wish! Sho does NOT insist on any particular architecture or code layout, which means you can experiment and evaluate several options, like:
   * embed rendering in controller/Sinatra app (or even model, if you want to be really naughty today!) for the very first 30-lines-long prototype, then move it elsewhere (like "Extract Method" refactoring pattern, you know?)
-  * embed rendering in your service (operation) objects, so
-  * make Users::List class with `#html`, `#atom` and `#json` methods and use it like `Users::List.new(scope).send(request.format)` or `User::List.send(request.format, scope)`
+  * embed rendering in your service (operation) objects, so corresponding forms and buttons would be nested in the operation, and reused in other places like `Product::Create.new(current_user).button`
+  * make `Users::List` class with `#html`, `#atom` and `#json` methods and use it like `Users::List.new(scope).send(request.format)` or `User::List.send(request.format, scope)`
   * make `Trailblazer::Cells`-like one-class-per-template objects to call them like `Users::HtmlList.new(scope).()`
   * ...switch between several of the approaches, or even combine them in the same app!
 
