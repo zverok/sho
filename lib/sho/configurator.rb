@@ -116,18 +116,18 @@ module Sho
 
     private
 
-    def define_template_method(name, tilt, mandatory, optional, layout)
+    def define_template_method(name, tilt, mandatory, optional, layout) # rubocop:disable Metrics/MethodLength
       arguments = ArgumentValidator.new(*mandatory, **optional)
-
       tilt = tilt.call if cache && tilt.respond_to?(:call)
 
       @host.__send__(:define_method, name) do |**locals, &block|
         locals = arguments.call(**locals)
+        tpl = tilt.respond_to?(:call) ? tilt.call : tilt
 
         if layout
-          __send__(layout) { (tilt.respond_to?(:call) ? tilt.call : tilt).render(self, **locals) }
+          __send__(layout) { tpl.render(self, **locals) }
         else
-          (tilt.respond_to?(:call) ? tilt.call : tilt).render(self, **locals, &block)
+          tpl.render(self, **locals, &block)
         end
       end
     end

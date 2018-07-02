@@ -103,6 +103,20 @@ RSpec.describe Sho::Configurator do
 
           it { is_expected.to eq 'before <p>It works!</p> after' }
         end
+
+        describe 'cache disabling' do
+          subject { File.write(path, 'p No cache!') }
+
+          before {
+            sho.cache = false
+            # Rewrite method definition without caching
+            sho.template :test, 'fake.slim', *args
+          }
+
+          its_block {
+            is_expected.to change(object, :test).from('<p>It works!</p>').to('<p>No cache!</p>')
+          }
+        end
       end
     end
 
@@ -118,23 +132,6 @@ RSpec.describe Sho::Configurator do
       let(:path) { 'app/views/details/fake.slim' }
 
       it { is_expected.to eq '<p>It works!</p>' }
-    end
-
-    context 'with cache disabled' do
-      subject { object }
-
-      before {
-        sho.cache = false
-        sho.template :test, 'fake.slim', *args
-      }
-      let(:params) { {} }
-      let(:path) { 'fake.slim' }
-
-      it {
-        expect(subject.test).to eq '<p>It works!</p>'
-        File.write(path, 'p No cache!')
-        expect(subject.test).to eq '<p>No cache!</p>'
-      }
     end
   end
 

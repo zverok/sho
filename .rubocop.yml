@@ -15,6 +15,7 @@ AllCops:
 
 Metrics/LineLength:
   Max: 100
+  IgnoreCopDirectives: true
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
