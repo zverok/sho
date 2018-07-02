@@ -27,9 +27,13 @@ module Sho
     #   meaning application's current folder (`Dir.pwd`).
     attr_accessor :base_folder
 
+    # @return [true, false] cache templates upon initialization. `true` by default.
+    attr_accessor :cache
+
     # @private
     def initialize(host)
       @host = host
+      @cache = true
     end
 
     # Generates instance method named `name` in a host module, which renders template from
@@ -53,7 +57,8 @@ module Sho
     # @param mandatory [Array<Symbol>] list of mandatory params;
     # @param optional [Hash{Symbol => Object}] list of optional params and their default values
     def template(name, template, *mandatory, _layout: nil, **optional)
-      tpl = Tilt.new(File.expand_path(template, base_folder || Dir.pwd))
+      tpl = proc { Tilt.new(File.expand_path(template, base_folder || Dir.pwd)) }
+
       define_template_method(name, tpl, mandatory, optional, _layout)
     end
 
@@ -76,7 +81,7 @@ module Sho
     # @param optional [Hash{Symbol => Object}] list of optional params and their default values
     def template_relative(name, template, *mandatory, _layout: nil, **optional)
       base = File.dirname(caller(1..1).first.split(':').first)
-      tpl = Tilt.new(File.expand_path(template, base))
+      tpl = proc { Tilt.new(File.expand_path(template, base)) }
 
       define_template_method(name, tpl, mandatory, optional, _layout)
     end
@@ -113,12 +118,16 @@ module Sho
 
     def define_template_method(name, tilt, mandatory, optional, layout)
       arguments = ArgumentValidator.new(*mandatory, **optional)
+
+      tilt = tilt.call if cache && tilt.respond_to?(:call)
+
       @host.__send__(:define_method, name) do |**locals, &block|
         locals = arguments.call(**locals)
+
         if layout
-          __send__(layout) { tilt.render(self, **locals) }
+          __send__(layout) { (tilt.respond_to?(:call) ? tilt.call : tilt).render(self, **locals) }
         else
-          tilt.render(self, **locals, &block)
+          (tilt.respond_to?(:call) ? tilt.call : tilt).render(self, **locals, &block)
         end
       end
     end
