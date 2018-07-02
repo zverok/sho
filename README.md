@@ -135,7 +135,7 @@ end
 
 **Template caching**
 
-Sho creates Tilt templates at a moment of the method definition. This seems to lead to most natural behavior: the templates are found and cached at a moment of code loading/reloading (whatever reloader you use).
+Sho creates Tilt templates at a moment of the method definition. This seems to lead to most natural behavior: the templates are found and cached at a moment of code loading/reloading (whatever reloader you use). Though, you can use `sho.cache = false` to "hard-reload" templates on each method call.
 
 ## Library status
 
