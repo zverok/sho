@@ -11,8 +11,8 @@ module Sho
     end
 
     def call(**params)
-      guard_missing!(params)
-      guard_unknown!(params)
+      guard_missing!(**params)
+      guard_unknown!(**params)
       params.merge(@optional.reject { |key,| params.key?(key) })
     end
 

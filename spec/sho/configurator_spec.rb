@@ -21,10 +21,12 @@ RSpec.describe Sho::Configurator do
 
   describe '#template' do
     let(:args) { [] }
+    let(:kwargs) { {} }
+
     let(:template) { 'p It works!' }
 
     context 'when default base folder' do
-      before { sho.template :test, 'fake.slim', *args }
+      before { sho.template :test, 'fake.slim', *args, **kwargs }
 
       let(:path) { 'fake.slim' }
 
@@ -48,7 +50,9 @@ RSpec.describe Sho::Configurator do
         end
 
         describe 'params passing' do
-          let(:args) { [:name, title: 'Mr.'] }
+          let(:args) { [:name] }
+          let(:kwargs) { {title: 'Mr.'} }
+
           let(:template) { 'p Hello #{title} #{name}!' }
           let(:params) { {name: 'Jones', title: 'Dr.'} }
 
@@ -56,7 +60,8 @@ RSpec.describe Sho::Configurator do
         end
 
         describe 'params validation' do
-          let(:args) { [:name, title: 'Mr.'] }
+          let(:args) { [:name] }
+          let(:kwargs) { {title: 'Mr.'} }
           let(:template) { 'p Hello #{title} #{name}!' }
 
           context 'with mandatory arguments missing' do
@@ -79,7 +84,8 @@ RSpec.describe Sho::Configurator do
         end
 
         describe 'layout' do
-          let(:args) { [_layout: :laymeout] }
+          let(:args) { [] }
+          let(:kwargs) { {_layout: :laymeout} }
 
           before {
             class << object
@@ -93,7 +99,8 @@ RSpec.describe Sho::Configurator do
         end
 
         describe 'layout from template' do
-          let(:args) { [_layout: :laymeout] }
+          let(:args) { [] }
+          let(:kwargs) { {_layout: :laymeout} }
 
           before {
             sho.inline_template :laymeout, erb: <<-ERB.strip
@@ -110,7 +117,7 @@ RSpec.describe Sho::Configurator do
           before {
             sho.cache = false
             # Rewrite method definition without caching
-            sho.template :test, 'fake.slim', *args
+            sho.template :test, 'fake.slim', *args, **kwargs
           }
 
           its_block {
@@ -125,7 +132,7 @@ RSpec.describe Sho::Configurator do
 
       before {
         sho.base_folder = 'app/views/details'
-        sho.template :test, 'fake.slim', *args
+        sho.template :test, 'fake.slim', *args, **kwargs
       }
 
       let(:params) { {} }
@@ -136,9 +143,11 @@ RSpec.describe Sho::Configurator do
   end
 
   describe '#template_relative' do
-    before { sho.template_relative :test, 'fake.slim', *args }
+    before { sho.template_relative :test, 'fake.slim', *args, **kwargs }
 
     let(:args) { [] }
+    let(:kwargs) { {} }
+
     let(:path) { 'spec/sho/fake.slim' }
     let(:params) { {} }
     let(:template) { 'p It works!' }
@@ -153,9 +162,10 @@ RSpec.describe Sho::Configurator do
   end
 
   describe '#template_inline' do
-    before { sho.template_inline :test, *args }
+    before { sho.template_inline :test, *args, **kwargs }
 
-    let(:args) { [{slim: 'p It works!'}] }
+    let(:args) { [] }
+    let(:kwargs) { {slim: 'p It works!'} }
 
     it { expect(view.instance_methods).to include(:test) }
 
