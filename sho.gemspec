@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   end
   s.add_development_dependency 'yard-junk'
 
-  s.add_development_dependency 'rspec', '~> 3.7.0'
+  s.add_development_dependency 'rspec', '~> 3.12.0'
   s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'saharspec'
   s.add_development_dependency 'fakefs'
