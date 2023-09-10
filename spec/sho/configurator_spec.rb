@@ -90,7 +90,7 @@ RSpec.describe Sho::Configurator do
           before {
             class << object
               def laymeout
-                'before ' + yield + ' after'
+                "before #{yield} after"
               end
             end
           }

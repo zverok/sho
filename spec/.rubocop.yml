@@ -3,9 +3,6 @@ inherit_from: ../.rubocop.yml
 Style/BlockDelimiters:
   Enabled: false
 
-RSpec/EmptyExampleGroup:
-  CustomIncludeMethods: [its_block, its_call, its_map]
-
 RSpec/NestedGroups:
   Enabled: false
 
@@ -14,3 +11,26 @@ Lint/InterpolationCheck:
 
 Metrics/BlockLength:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/ImplicitSubject:
+  EnforcedStyle: require_implicit
+
+# A way to tell rspec that its(..) { is_expected ... } and its_block { is_expected } are counted
+# as examples; otherwise it will say "no examples in the context".
+# See https://docs.rubocop.org/rubocop-rspec/third_party_rspec_syntax_extensions.html
+RSpec:
+  Language:
+    Examples:
+      Regular:
+        # original ones
+        - it
+        - specify
+        # rspec-its
+        - its
+        # saharspec
+        - its_block
+        - its_map
+        - its_call

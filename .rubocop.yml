@@ -2,8 +2,8 @@ require: rubocop-rspec
 
 AllCops:
   Include:
-    - 'lib/**/*'
-    - 'spec/**/*'
+    - 'lib/**/*.rb'
+    - 'spec/**/*.rb'
   Exclude:
     - 'tmp/**/*'
     - 'examples/**'
@@ -11,9 +11,11 @@ AllCops:
     - Rakefile
     - '*.gemspec'
   DisplayCopNames: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.7
+  NewCops: enable
+  SuggestExtensions: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
   IgnoreCopDirectives: true
 

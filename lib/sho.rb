@@ -22,7 +22,7 @@ module Sho
   # included into.
   def self.included(mod)
     mod.define_singleton_method(:sho) {
-      @__sho_configurator__ ||= Configurator.new(mod)
+      @__sho_configurator__ ||= Configurator.new(mod) # rubocop:disable Naming/MemoizedInstanceVariableName
     }
   end
 end

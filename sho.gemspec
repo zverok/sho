@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = `git ls-files lib LICENSE.txt *.md`.split($RS)
   s.require_paths = ["lib"]
 
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.7.0'
 
   s.add_runtime_dependency 'tilt'
 
@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'fakefs'
   s.add_development_dependency 'slim'
 
-  s.add_development_dependency 'rubocop', '~> 0.57.2'
-  s.add_development_dependency 'rubocop-rspec', '~> 1.27.0'
+  s.add_development_dependency 'rubocop', '~> 1.56.0'
+  s.add_development_dependency 'rubocop-rspec', '~> 2.24.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubygems-tasks'
